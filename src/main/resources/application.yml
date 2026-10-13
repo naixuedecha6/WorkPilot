@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: workpilot
+  datasource:
+    url: jdbc:h2:file:./data/workpilot;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  ai:
+    openai:
+      # DeepSeek 用 OpenAI 兼容协议,直接复用你 .env 里的 Key
+      api-key: ${OPENAI_API_KEY:}
+      base-url: ${OPENAI_API_BASE:https://api.deepseek.com}
+      chat:
+        options:
+          model: deepseek-chat
+
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+workpilot:
+  vector-store:
+    path: ./data/vectorstore.json
+  agent:
+    max-steps: 8
+    tool-timeout-seconds: 30
+  jwt:
+    secret: ${WORKPILOT_JWT_SECRET:dev-only-secret-please-change-in-production-32bytes-min}
+    expiration-hours: 8
+    issuer: workpilot
+
+logging:
+  level:
+    root: INFO
+    com.workpilot: DEBUG
+    org.springframework.ai: INFO

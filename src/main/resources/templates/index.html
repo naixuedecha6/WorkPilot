@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WorkPilot · 企业 Agent 平台</title>
+    <style>
+        /* ============================================================
+           主题系统:CSS 变量 + data-theme + 跟随系统
+           ============================================================ */
+        :root {
+            /* Dark (默认) */
+            --bg-page: #0a0e1a;
+            --bg-panel: #131a2b;
+            --bg-elevated: #1a2238;
+            --bg-input: #0f1424;
+            --border: #25304a;
+            --border-strong: #3a4565;
+            --text: #e2e8f0;
+            --text-strong: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-faint: #64748b;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --primary-soft: rgba(59, 130, 246, 0.15);
+            --accent: #60a5fa;
+            --success: #10b981;
+            --success-soft: rgba(16, 185, 129, 0.18);
+            --warning: #f59e0b;
+            --warning-soft: rgba(245, 158, 11, 0.18);
+            --danger: #ef4444;
+            --danger-soft: rgba(239, 68, 68, 0.18);
+            --info: #06b6d4;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow: 0 4px 12px rgba(0,0,0,0.25);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.4);
+            --ring: rgba(59, 130, 246, 0.4);
+            --gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #1e293b 100%);
+            --gradient-login: linear-gradient(135deg, #0a0e1a 0%, #1e1b4b 50%, #0a0e1a 100%);
+            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            --gradient-card: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(99,102,241,0.04) 100%);
+            --code-bg: #0a0e1a;
+            --hover-bg: rgba(255,255,255,0.04);
+            --scrollbar: rgba(255,255,255,0.1);
+        }
+
+        /* 跟随系统:浅色 */
+        @media (prefers-color-scheme: light) {
+            :root:not([data-theme="dark"]):not([data-theme="light"]) {
+                --bg-page: #f7f8fc;
+                --bg-panel: #ffffff;
+                --bg-elevated: #f1f5f9;
+                --bg-input: #ffffff;
+                --border: #e2e8f0;
+                --border-strong: #cbd5e1;
+                --text: #0f172a;
+                --text-strong: #020617;
+                --text-muted: #64748b;
+                --text-faint: #94a3b8;
+                --primary: #2563eb;
+                --primary-hover: #1d4ed8;
+                --primary-soft: rgba(37, 99, 235, 0.1);
+                --accent: #1d4ed8;
+                --success: #059669;
+                --success-soft: rgba(5, 150, 105, 0.12);
+                --warning: #d97706;
+                --warning-soft: rgba(217, 119, 6, 0.12);
+                --danger: #dc2626;
+                --danger-soft: rgba(220, 38, 38, 0.12);
+                --info: #0891b2;
+                --shadow-sm: 0 1px 2px rgba(15,23,42,0.05);
+                --shadow: 0 4px 12px rgba(15,23,42,0.08);
+                --shadow-lg: 0 12px 40px rgba(15,23,42,0.12);
+                --ring: rgba(37, 99, 235, 0.3);
+                --gradient-hero: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 50%, #ede9fe 100%);
+                --gradient-login: linear-gradient(135deg, #f7f8fc 0%, #e0e7ff 50%, #f7f8fc 100%);
+                --gradient-primary: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+                --gradient-card: linear-gradient(135deg, rgba(37,99,235,0.04) 0%, rgba(79,70,229,0.02) 100%);
+                --code-bg: #f1f5f9;
+                --hover-bg: rgba(0,0,0,0.03);
+                --scrollbar: rgba(0,0,0,0.15);
+            }
+        }
+
+        /* 显式:浅色 */
+        [data-theme="light"] {
+            --bg-page: #f7f8fc;
+            --bg-panel: #ffffff;
+            --bg-elevated: #f1f5f9;
+            --bg-input: #ffffff;
+            --border: #e2e8f0;
+            --border-strong: #cbd5e1;
+            --text: #0f172a;
+            --text-strong: #020617;
+            --text-muted: #64748b;
+            --text-faint: #94a3b8;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-soft: rgba(37, 99, 235, 0.1);
+            --accent: #1d4ed8;
+            --success: #059669;
+            --success-soft: rgba(5, 150, 105, 0.12);
+            --warning: #d97706;
+            --warning-soft: rgba(217, 119, 6, 0.12);
+            --danger: #dc2626;
+            --danger-soft: rgba(220, 38, 38, 0.12);
+            --info: #0891b2;
+            --shadow-sm: 0 1px 2px rgba(15,23,42,0.05);
+            --shadow: 0 4px 12px rgba(15,23,42,0.08);
+            --shadow-lg: 0 12px 40px rgba(15,23,42,0.12);
+            --ring: rgba(37, 99, 235, 0.3);
+            --gradient-hero: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 50%, #ede9fe 100%);
+            --gradient-login: linear-gradient(135deg, #f7f8fc 0%, #e0e7ff 50%, #f7f8fc 100%);
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            --gradient-card: linear-gradient(135deg, rgba(37,99,235,0.04) 0%, rgba(79,70,229,0.02) 100%);
+            --code-bg: #f1f5f9;
+            --hover-bg: rgba(0,0,0,0.03);
+            --scrollbar: rgba(0,0,0,0.15);
+        }
+
+        /* 显式:深色 (覆盖 media query) */
+        [data-theme="dark"] {
+            --bg-page: #0a0e1a;
+            --bg-panel: #131a2b;
+            --bg-elevated: #1a2238;
+            --bg-input: #0f1424;
+            --border: #25304a;
+            --border-strong: #3a4565;
+            --text: #e2e8f0;
+            --text-strong: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-faint: #64748b;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --primary-soft: rgba(59, 130, 246, 0.15);
+            --accent: #60a5fa;
+            --success: #10b981;
+            --success-soft: rgba(16, 185, 129, 0.18);
+            --warning: #f59e0b;
+            --warning-soft: rgba(245, 158, 11, 0.18);
+            --danger: #ef4444;
+            --danger-soft: rgba(239, 68, 68, 0.18);
+            --info: #06b6d4;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow: 0 4px 12px rgba(0,0,0,0.25);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.4);
+            --ring: rgba(59, 130, 246, 0.4);
+            --gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #1e293b 100%);
+            --gradient-login: linear-gradient(135deg, #0a0e1a 0%, #1e1b4b 50%, #0a0e1a 100%);
+            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            --gradient-card: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(99,102,241,0.04) 100%);
+            --code-bg: #0a0e1a;
+            --hover-bg: rgba(255,255,255,0.04);
+            --scrollbar: rgba(255,255,255,0.1);
+        }
+
+        /* ============================================================
+           基础
+           ============================================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            background: var(--bg-page);
+            color: var(--text);
+            display: flex;
+            overflow: hidden;
+            transition: background 0.2s ease, color 0.2s ease;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+
+        /* ============================================================
+           登录页
+           ============================================================ */
+        #loginPage {
+            position: fixed; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--gradient-login);
+            z-index: 200;
+            padding: 20px;
+        }
+        #loginPage::before {
+            content: ''; position: absolute; inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(99,102,241,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(59,130,246,0.12) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        #loginPage.hidden { display: none; }
+        .login-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 44px;
+            width: 440px;
+            max-width: 100%;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            backdrop-filter: blur(20px);
+        }
+        .login-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 20px 20px 0 0;
+        }
+        .login-card .logo {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+        }
+        .login-card .logo-icon {
+            width: 44px; height: 44px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+        .login-card h1 { font-size: 22px; margin-bottom: 2px; }
+        .login-card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 28px; }
+        .login-tabs {
+            display: flex; gap: 4px; margin-bottom: 22px;
+            background: var(--bg-elevated); border-radius: 10px; padding: 4px;
+        }
+        .login-tabs .tab-btn {
+            flex: 1; padding: 9px; text-align: center; cursor: pointer;
+            border-radius: 7px; font-size: 13px; color: var(--text-muted);
+            transition: all 0.15s; user-select: none; font-weight: 500;
+        }
+        .login-tabs .tab-btn.active { background: var(--bg-panel); color: var(--primary); box-shadow: var(--shadow-sm); }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 11px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 9px; color: var(--text); font-size: 14px;
+            outline: none; font-family: inherit;
+            transition: all 0.15s;
+        }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--ring);
+        }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .login-btn {
+            width: 100%; padding: 12px;
+            background: var(--gradient-primary);
+            color: white; border: none; border-radius: 9px;
+            cursor: pointer; font-size: 14px; font-weight: 600;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+            transition: all 0.15s;
+        }
+        .login-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(59,130,246,0.4); }
+        .login-btn:active { transform: translateY(0); }
+        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .login-hint {
+            margin-top: 18px; padding: 12px;
+            background: var(--bg-elevated); border-radius: 8px;
+            font-size: 12px; color: var(--text-muted); line-height: 1.7;
+        }
+        .login-hint b { color: var(--text); }
+        .login-error { color: var(--danger); font-size: 13px; margin-top: 10px; min-height: 18px; }
+
+        /* ============================================================
+           App Shell
+           ============================================================ */
+        #appShell { display: flex; width: 100%; height: 100%; }
+        #appShell.hidden { display: none; }
+
+        aside {
+            width: 232px; background: var(--bg-panel);
+            padding: 0; flex-shrink: 0;
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+        }
+        aside .logo-area {
+            padding: 22px 22px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        aside .logo-icon {
+            width: 32px; height: 32px;
+            background: var(--gradient-primary);
+            border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; box-shadow: 0 2px 8px rgba(59,130,246,0.25);
+        }
+        aside .logo-text h1 { font-size: 15px; font-weight: 600; color: var(--text-strong); }
+        aside .logo-text small { font-size: 11px; color: var(--text-faint); }
+        aside .nav { padding: 14px 10px; flex: 1; overflow-y: auto; }
+        aside .nav-section { font-size: 10px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 12px 6px; font-weight: 600; }
+        aside .nav-item {
+            padding: 9px 12px; cursor: pointer; color: var(--text-muted);
+            font-size: 13.5px; display: flex; align-items: center; gap: 10px;
+            border-radius: 8px; margin-bottom: 2px;
+            transition: all 0.15s; user-select: none; position: relative;
+        }
+        aside .nav-item:hover { background: var(--hover-bg); color: var(--text); }
+        aside .nav-item.active {
+            background: var(--primary-soft); color: var(--primary); font-weight: 500;
+        }
+        aside .nav-item .badge {
+            background: var(--danger); color: white; font-size: 10px;
+            padding: 1px 7px; border-radius: 10px; margin-left: auto; font-weight: 600;
+            box-shadow: 0 2px 6px rgba(239,68,68,0.3);
+        }
+
+        main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+        header {
+            padding: 14px 28px; background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+        }
+        header h2 { font-size: 16px; font-weight: 600; color: var(--text-strong); }
+        header .user-info { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+        header .user-info .role-tag {
+            padding: 2px 10px; border-radius: 12px; font-size: 10.5px;
+            background: var(--bg-elevated); color: var(--text-muted); font-weight: 500;
+        }
+        header .user-info .role-tag.admin { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white; }
+        header .user-info .username { color: var(--text); font-weight: 500; }
+        header .user-info button {
+            background: transparent; color: var(--text-muted);
+            border: 1px solid var(--border); padding: 6px 14px;
+            border-radius: 7px; cursor: pointer; font-size: 12.5px;
+            transition: all 0.15s; font-weight: 500;
+        }
+        header .user-info button:hover { color: var(--text); border-color: var(--border-strong); background: var(--hover-bg); }
+
+        /* 主题切换 */
+        .theme-switcher {
+            display: inline-flex; gap: 2px;
+            background: var(--bg-elevated);
+            border-radius: 8px; padding: 3px;
+            border: 1px solid var(--border);
+        }
+        .theme-btn {
+            background: transparent; border: none;
+            padding: 5px 8px; cursor: pointer; border-radius: 5px;
+            font-size: 14px; line-height: 1; color: var(--text-muted);
+            transition: all 0.15s;
+        }
+        .theme-btn:hover { color: var(--text); }
+        .theme-btn.active { background: var(--bg-panel); color: var(--primary); box-shadow: var(--shadow-sm); }
+
+        .tab { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+        .tab.active { display: flex; }
+
+        /* ============================================================
+           Dashboard
+           ============================================================ */
+        .panel { padding: 24px 28px; flex: 1; overflow-y: auto; }
+        .stat-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 14px; margin-bottom: 22px;
+        }
+        .stat-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 18px 20px;
+            transition: all 0.2s; position: relative; overflow: hidden;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: var(--gradient-primary); opacity: 0; transition: opacity 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--border-strong); }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-card .label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+        .stat-card .value { font-size: 26px; font-weight: 700; color: var(--text-strong); line-height: 1.2; }
+        .stat-card .delta { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+        .welcome-card {
+            background: var(--gradient-hero);
+            border: 1px solid var(--border);
+            border-radius: 14px; padding: 24px 28px;
+            margin-bottom: 22px; color: var(--text);
+        }
+        [data-theme="light"] .welcome-card { color: #1e293b; }
+        [data-theme="light"] .welcome-card .sub-text { color: #475569; }
+        .welcome-card h3 { margin-bottom: 8px; font-size: 18px; }
+        .welcome-card .sub-text { font-size: 13.5px; line-height: 1.7; }
+
+        .section-title {
+            font-size: 13px; font-weight: 600; color: var(--text);
+            margin: 20px 0 12px; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .info-card {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 8px 4px;
+        }
+        .info-card .card-row {
+            display: flex; justify-content: space-between; padding: 9px 18px;
+            font-size: 13px; transition: background 0.1s; border-radius: 6px;
+        }
+        .info-card .card-row:hover { background: var(--hover-bg); }
+        .info-card .card-row .label { color: var(--text-muted); }
+        .info-card .card-row .value { color: var(--text); font-weight: 500; }
+
+        /* ============================================================
+           Chat
+           ============================================================ */
+        #chat { flex: 1; overflow-y: auto; padding: 20px 16px; }
+        .msg {
+            max-width: 760px; margin: 10px auto; padding: 12px 18px;
+            border-radius: 14px; line-height: 1.65;
+            word-wrap: break-word; font-size: 14.5px; white-space: pre-wrap;
+            box-shadow: var(--shadow-sm);
+            animation: msgIn 0.25s ease;
+        }
+        @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .user {
+            background: var(--gradient-primary); color: white;
+            margin-left: auto; border-bottom-right-radius: 4px;
+        }
+        .assistant {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+        .system {
+            background: var(--bg-elevated); color: var(--text);
+            border: 1px solid var(--border); border-left: 3px solid var(--info);
+            font-size: 13px; font-family: ui-monospace, SFMono-Regular, "Cascadia Code", monospace;
+        }
+        .error { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+
+        .citations {
+            max-width: 760px; margin: -4px auto 12px; padding: 12px 14px;
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: 12px; box-shadow: var(--shadow-sm);
+        }
+        .citations .label {
+            font-size: 12px; color: var(--text-muted);
+            margin-bottom: 10px; font-weight: 600; display: flex; align-items: center; gap: 6px;
+        }
+        .citation {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--primary);
+            border-radius: 8px; padding: 10px 12px;
+            margin-bottom: 6px; font-size: 12.5px; line-height: 1.5;
+            transition: all 0.15s;
+        }
+        .citation:hover { border-color: var(--primary); }
+        .citation:last-child { margin-bottom: 0; }
+        .citation .src { color: var(--text); font-weight: 500; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .citation .src .idx {
+            background: var(--primary-soft); color: var(--primary);
+            padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600;
+        }
+        .citation .src .doc { color: var(--accent); }
+        .citation .src .meta { color: var(--text-muted); font-weight: 400; font-size: 11.5px; }
+        .citation .text { color: var(--text-muted); }
+
+        #inputArea {
+            padding: 16px 20px; background: var(--bg-panel);
+            border-top: 1px solid var(--border);
+            display: flex; gap: 10px; flex-shrink: 0;
+        }
+        #inputArea input {
+            flex: 1; padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px; background: var(--bg-input); color: var(--text);
+            font-size: 14px; outline: none; font-family: inherit;
+            transition: all 0.15s;
+        }
+        #inputArea input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--ring); }
+        #inputArea button {
+            padding: 12px 26px; color: white; border: none;
+            border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600;
+            background: var(--gradient-primary);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.25);
+            transition: all 0.15s;
+        }
+        #inputArea button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(59,130,246,0.35); }
+        #inputArea button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* ============================================================
+           通用
+           ============================================================ */
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .panel h3 { font-size: 15px; color: var(--text-strong); font-weight: 600; }
+        .card {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 18px 20px;
+            margin-bottom: 12px; box-shadow: var(--shadow-sm);
+            transition: all 0.15s;
+        }
+        .card:hover { border-color: var(--border-strong); }
+        .card-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; gap: 12px; }
+        .card-row .label { color: var(--text-muted); flex-shrink: 0; }
+        .card-row .value { text-align: right; word-break: break-word; color: var(--text); }
+
+        .tag {
+            display: inline-block; padding: 3px 9px; border-radius: 6px;
+            font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+        }
+        .tag.success, .tag.INDEXED, .tag.RESOLVED, .tag.DONE, .tag.COMPLETED { background: var(--success-soft); color: var(--success); }
+        .tag.pending { background: var(--warning-soft); color: var(--warning); }
+        .tag.failed, .tag.FAILED, .tag.CRITICAL, .tag.REJECTED, .tag.CANCELLED { background: var(--danger-soft); color: var(--danger); }
+        .tag.running, .tag.PROCESSING, .tag.IN_PROGRESS, .tag.WAITING_APPROVAL { background: var(--primary-soft); color: var(--primary); }
+        .tag.waiting, .tag.UPLOADED, .tag.PLANNING, .tag.CREATED { background: var(--bg-elevated); color: var(--text-muted); }
+        .tag.completed, .tag.OPEN { background: var(--primary-soft); color: var(--primary); }
+        .tag.LOW, .tag.low, .tag.CLOSED { background: var(--bg-elevated); color: var(--text-muted); }
+        .tag.MEDIUM, .tag.medium { background: var(--primary-soft); color: var(--primary); }
+        .tag.HIGH, .tag.high { background: var(--warning-soft); color: var(--warning); }
+        .tag.URGENT, .tag.urgent { background: var(--danger-soft); color: var(--danger); }
+        .tag.EXECUTING, .tag.executing { background: var(--primary-soft); color: var(--primary); }
+
+        .btn {
+            padding: 7px 16px; border-radius: 8px; border: none;
+            cursor: pointer; font-size: 13px; font-weight: 500;
+            color: white; background: var(--gradient-primary);
+            transition: all 0.15s; box-shadow: 0 2px 6px rgba(59,130,246,0.2);
+        }
+        .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn.danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 2px 6px rgba(239,68,68,0.2); }
+        .btn.danger:hover:not(:disabled) { box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+        .btn.secondary { background: var(--bg-elevated); color: var(--text); box-shadow: none; border: 1px solid var(--border); }
+        .btn.secondary:hover:not(:disabled) { background: var(--hover-bg); border-color: var(--border-strong); transform: none; }
+        .btn.success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 2px 6px rgba(16,185,129,0.2); }
+        .btn.success:hover:not(:disabled) { box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+        .btn.warning { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; box-shadow: 0 2px 6px rgba(245,158,11,0.2); }
+        .btn.small { padding: 4px 11px; font-size: 12px; border-radius: 6px; }
+
+        .file-drop {
+            border: 2px dashed var(--border); border-radius: 12px; padding: 32px;
+            text-align: center; color: var(--text-muted); cursor: pointer;
+            margin-bottom: 18px; background: var(--bg-panel);
+            transition: all 0.15s;
+        }
+        .file-drop:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+        .file-drop input { display: none; }
+
+        .table { width: 100%; border-collapse: collapse; }
+        .table th, .table td {
+            text-align: left; padding: 11px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+        .table th {
+            color: var(--text-muted); font-weight: 600;
+            background: var(--bg-elevated); font-size: 11.5px;
+            text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .table tbody tr { transition: background 0.1s; }
+        .table tbody tr:hover { background: var(--hover-bg); }
+        .table tbody tr.selected { background: var(--primary-soft); }
+        .table tbody tr { cursor: pointer; }
+        .table-wrap {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm);
+        }
+
+        .filter-bar {
+            display: flex; gap: 8px; margin-bottom: 14px;
+            flex-wrap: wrap; align-items: center;
+        }
+        .filter-bar select, .filter-bar input {
+            padding: 8px 12px; background: var(--bg-panel);
+            border: 1px solid var(--border); border-radius: 8px;
+            color: var(--text); font-size: 13px; outline: none;
+            transition: all 0.15s;
+        }
+        .filter-bar select:focus, .filter-bar input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--ring); }
+        .filter-bar label { color: var(--text-muted); font-size: 12px; font-weight: 500; }
+
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            display: none; align-items: center; justify-content: center; z-index: 100;
+            backdrop-filter: blur(4px);
+        }
+        [data-theme="light"] .modal { background: rgba(15,23,42,0.4); }
+        .modal.active { display: flex; animation: modalIn 0.2s ease; }
+        @keyframes modalIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-content {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: 16px; padding: 28px; max-width: 800px; width: 90%;
+            max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+            animation: modalSlide 0.25s ease;
+        }
+        @keyframes modalSlide { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-content h3 { margin-bottom: 18px; font-size: 17px; color: var(--text-strong); }
+
+        .step-item {
+            padding: 11px 14px; background: var(--bg-elevated);
+            border-radius: 8px; margin: 6px 0;
+            border-left: 3px solid var(--border); font-size: 13px;
+        }
+        .step-item.SUCCESS { border-left-color: var(--success); }
+        .step-item.FAILED { border-left-color: var(--danger); }
+        .step-item.PENDING, .step-item.RUNNING { border-left-color: var(--warning); }
+        .step-item .args {
+            color: var(--text-muted); margin-top: 4px; font-size: 12px;
+            white-space: pre-wrap; word-break: break-all;
+        }
+
+        .empty {
+            color: var(--text-faint); padding: 36px; text-align: center;
+            font-size: 13px;
+        }
+        .empty-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.5; }
+
+        .report-body {
+            background: var(--bg-elevated); padding: 16px;
+            border-radius: 10px; font-size: 14px; line-height: 1.75;
+            white-space: pre-wrap; max-height: 60vh; overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+        .evidence-list {
+            background: var(--bg-elevated); padding: 12px;
+            border-radius: 10px; font-size: 12px;
+            font-family: ui-monospace, SFMono-Regular, "Cascadia Code", monospace;
+            max-height: 220px; overflow-y: auto; white-space: pre-wrap;
+            border: 1px solid var(--border);
+        }
+        .section-title-inline {
+            font-size: 12px; font-weight: 600; color: var(--text);
+            margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 0.05em;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .split { display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; }
+        @media (max-width: 1000px) { .split { grid-template-columns: 1fr; } }
+
+        .run-card.expanded .trace-inline { display: block; }
+        .trace-inline {
+            display: none; margin-top: 16px; padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .trace-inline .plan-block {
+            background: var(--code-bg); padding: 12px; border-radius: 8px;
+            font-family: ui-monospace, SFMono-Regular, "Cascadia Code", monospace;
+            font-size: 11.5px; color: var(--text); max-height: 200px; overflow: auto;
+            border: 1px solid var(--border);
+        }
+
+        .search-box { display: flex; gap: 8px; margin-bottom: 14px; }
+        .search-box input {
+            flex: 1; padding: 11px 14px;
+            background: var(--bg-input); border: 1px solid var(--border);
+            border-radius: 9px; color: var(--text); font-size: 14px; outline: none;
+            transition: all 0.15s;
+        }
+        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--ring); }
+        .hit-card {
+            background: var(--bg-elevated); border: 1px solid var(--border);
+            border-left: 3px solid var(--primary);
+            border-radius: 8px; padding: 12px 14px; margin-bottom: 8px;
+            transition: all 0.15s;
+        }
+        .hit-card:hover { border-color: var(--primary); }
+        .hit-card .src {
+            color: var(--text); font-size: 12.5px; font-weight: 500;
+            margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+        }
+        .hit-card .src .idx {
+            background: var(--primary-soft); color: var(--primary);
+            padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600;
+        }
+        .hit-card .src .doc { color: var(--accent); }
+        .hit-card .text { font-size: 13px; line-height: 1.65; color: var(--text-muted); max-height: 140px; overflow: auto; }
+
+        /* 滚动条平滑滚动 */
+        html { scroll-behavior: smooth; }
+
+        /* 选中文字颜色 */
+        ::selection { background: var(--primary-soft); color: var(--text-strong); }
+    </style>
+</head>
+<body>
+
+<!-- ============== 登录页 ============== -->
+<div id="loginPage">
+    <div class="login-card">
+        <div class="logo">
+            <div class="logo-icon">🤖</div>
+            <div>
+                <h1>WorkPilot</h1>
+                <p class="sub" style="margin: 0;">企业 Agent 平台</p>
+            </div>
+        </div>
+        <p class="sub">登录以开始使用</p>
+        <div class="login-tabs">
+            <div class="tab-btn active" data-form="login">登录</div>
+            <div class="tab-btn" data-form="register">注册</div>
+        </div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>用户名</label>
+                <input id="loginUsername" type="text" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input id="loginPassword" type="password" autocomplete="current-password" required>
+            </div>
+            <button class="login-btn" type="submit">登录</button>
+            <div class="login-error" id="loginError"></div>
+        </form>
+        <form id="registerForm" style="display:none">
+            <div class="form-group">
+                <label>用户名 (字母/数字/_.-,3-32 位)</label>
+                <input id="regUsername" type="text" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label>密码 (6-64 位)</label>
+                <input id="regPassword" type="password" autocomplete="new-password" required minlength="6">
+            </div>
+            <button class="login-btn" type="submit">注册并登录</button>
+            <div class="login-error" id="registerError"></div>
+        </form>
+        <div class="login-hint">
+            <b>演示账号</b><br>
+            用户名: <b>demo</b> / 密码: <b>admin123</b><br>
+            用户名: <b>admin</b> / 密码: <b>admin123</b>
+        </div>
+    </div>
+</div>
+
+<!-- ============== 主应用 ============== -->
+<div id="appShell" class="hidden">
+<aside>
+    <div class="logo-area">
+        <div class="logo-icon">🤖</div>
+        <div class="logo-text">
+            <h1>WorkPilot</h1>
+            <small>企业 Agent 平台</small>
+        </div>
+    </div>
+    <div class="nav">
+        <div class="nav-section">主要</div>
+        <div class="nav-item active" data-tab="dashboard">📊 概览</div>
+        <div class="nav-item" data-tab="chat">💬 聊天</div>
+        <div class="nav-item" data-tab="runs">⚡ Agent</div>
+        <div class="nav-section">数据</div>
+        <div class="nav-item" data-tab="incidents">🚨 故障</div>
+        <div class="nav-item" data-tab="reports">📄 报告</div>
+        <div class="nav-item" data-tab="knowledge">📚 知识库</div>
+        <div class="nav-section">流程</div>
+        <div class="nav-item" data-tab="approvals">🔐 审批 <span id="apprBadge" class="badge" style="display:none">0</span></div>
+        <div class="nav-item" data-tab="tasks">✅ 待办</div>
+    </div>
+</aside>
+
+<main>
+    <header>
+        <h2 id="pageTitle">概览</h2>
+        <div class="user-info">
+            <div class="theme-switcher" title="主题切换">
+                <button class="theme-btn" data-theme-set="system" title="跟随系统">💻</button>
+                <button class="theme-btn" data-theme-set="light" title="浅色">☀️</button>
+                <button class="theme-btn" data-theme-set="dark" title="深色">🌙</button>
+            </div>
+            <span id="userRole" class="role-tag">USER</span>
+            <span id="userName" class="username">-</span>
+            <button onclick="logout()">退出</button>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <div id="tab-dashboard" class="tab active">
+        <div class="panel">
+            <div class="welcome-card">
+                <h3>👋 欢迎回来,<span id="welcomeName">-</span></h3>
+                <p class="sub-text">这里是 WorkPilot 企业 Agent 平台。上传文档构建知识库,启动多步骤任务让 AI 帮你查询、分析、创建待办。所有写操作都会先暂停等你审批。</p>
+            </div>
+            <div class="section-title">数据概览</div>
+            <div class="stat-grid">
+                <div class="stat-card"><div class="label">故障总数</div><div class="value" id="statIncidents">-</div><div class="delta"><span id="statIncidentsOpen">-</span> 待处理</div></div>
+                <div class="stat-card"><div class="label">报告数</div><div class="value" id="statReports">-</div><div class="delta">已生成报告</div></div>
+                <div class="stat-card"><div class="label">知识库文档</div><div class="value" id="statDocs">-</div><div class="delta">PDF / MD / TXT</div></div>
+                <div class="stat-card"><div class="label">Agent 运行</div><div class="value" id="statRuns">-</div><div class="delta">累计执行</div></div>
+                <div class="stat-card"><div class="label">待审批</div><div class="value" id="statApprovals">-</div><div class="delta">需要你确认</div></div>
+                <div class="stat-card"><div class="label">待办</div><div class="value" id="statTasks">-</div><div class="delta">未完成事项</div></div>
+            </div>
+            <div class="section-title">快速开始</div>
+            <div class="info-card">
+                <div class="card-row"><span class="label">💬 聊天</span><span class="value">直接对话或启动 Agent 任务</span></div>
+                <div class="card-row"><span class="label">🚨 故障</span><span class="value">查询、筛选、创建、更新故障状态</span></div>
+                <div class="card-row"><span class="label">📄 报告</span><span class="value">查看 Agent 生成的结构化分析报告</span></div>
+                <div class="card-row"><span class="label">📚 知识库</span><span class="value">上传文档,试试检索预览</span></div>
+                <div class="card-row"><span class="label">⚡ Agent</span><span class="value">查看历史任务和执行轨迹</span></div>
+                <div class="card-row"><span class="label">🔐 审批</span><span class="value">批准 / 拒绝 Agent 提交的写操作</span></div>
+                <div class="card-row"><span class="label">✅ 待办</span><span class="value">管理跟进事项</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat -->
+    <div id="tab-chat" class="tab">
+        <div id="chat"></div>
+        <div id="inputArea">
+            <input id="msgInput" type="text" placeholder="试试:查知识库里关于性能优化的内容,生成报告" autocomplete="off">
+            <button id="sendBtn">发送</button>
+        </div>
+    </div>
+
+    <!-- Incidents -->
+    <div id="tab-incidents" class="tab">
+        <div class="panel">
+            <div class="panel-header">
+                <h3>故障管理</h3>
+                <button class="btn" onclick="openIncidentForm()">+ 新建故障</button>
+            </div>
+            <div class="stat-grid" id="incidentStats"></div>
+            <div class="filter-bar">
+                <label>严重度</label>
+                <select id="incFilterSeverity" onchange="loadIncidents()">
+                    <option value="">全部</option>
+                    <option value="LOW">LOW</option><option value="MEDIUM">MEDIUM</option>
+                    <option value="HIGH">HIGH</option><option value="CRITICAL">CRITICAL</option>
+                </select>
+                <label>状态</label>
+                <select id="incFilterStatus" onchange="loadIncidents()">
+                    <option value="">全部</option>
+                    <option value="OPEN">OPEN</option>
+                    <option value="IN_PROGRESS">IN_PROGRESS</option>
+                    <option value="RESOLVED">RESOLVED</option>
+                    <option value="CLOSED">CLOSED</option>
+                </select>
+                <label>类别</label>
+                <select id="incFilterCategory" onchange="loadIncidents()">
+                    <option value="">全部</option>
+                </select>
+                <button class="btn secondary small" onclick="resetIncFilters()">重置</button>
+            </div>
+            <div class="split">
+                <div>
+                    <div class="table-wrap">
+                    <table class="table" id="incidentTable">
+                        <thead><tr><th>严重度</th><th>标题</th><th>类别</th><th>状态</th><th>发生时间</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                    </div>
+                </div>
+                <div id="incidentDetail" class="card">
+                    <div class="empty">← 选择左侧故障查看详情</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reports -->
+    <div id="tab-reports" class="tab">
+        <div class="panel">
+            <div class="panel-header">
+                <h3>报告中心</h3>
+                <small style="color: var(--text-muted);">Agent 调用 generate_report 工具自动生成</small>
+            </div>
+            <div class="split">
+                <div>
+                    <div class="table-wrap">
+                    <table class="table" id="reportTable">
+                        <thead><tr><th>标题</th><th>来源任务</th><th>状态</th><th>生成时间</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                    </div>
+                </div>
+                <div id="reportDetail">
+                    <div class="empty">← 选择报告查看内容</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Knowledge -->
+    <div id="tab-knowledge" class="tab">
+        <div class="panel">
+            <h3>上传文档 (PDF / Markdown / TXT)</h3>
+            <label class="file-drop" id="fileDrop">
+                <input type="file" id="fileInput" accept=".pdf,.md,.markdown,.txt">
+                📤 点击或拖拽文件到此处上传
+            </label>
+            <h3>试试搜索(直接语义检索,不走 Agent)</h3>
+            <div class="search-box">
+                <input id="searchInput" type="text" placeholder="例如:数据库连接 / 慢查询 / 缓存策略" onkeydown="if(event.key==='Enter') doSearch()">
+                <button class="btn" onclick="doSearch()">🔍 搜索</button>
+            </div>
+            <div id="searchResults"></div>
+            <h3 style="margin-top: 24px;">已上传文档</h3>
+            <div class="table-wrap">
+            <table class="table" id="docTable">
+                <thead><tr><th>名称</th><th>状态</th><th>分块数</th><th>上传时间</th><th>操作</th></tr></thead>
+                <tbody></tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Runs -->
+    <div id="tab-runs" class="tab">
+        <div class="panel">
+            <div class="panel-header">
+                <h3>Agent 运行历史</h3>
+                <button class="btn" onclick="document.querySelector('[data-tab=chat]').click()">+ 启动新任务</button>
+            </div>
+            <div id="runList"></div>
+        </div>
+    </div>
+
+    <!-- Approvals -->
+    <div id="tab-approvals" class="tab">
+        <div class="panel">
+            <h3>待审批操作</h3>
+            <div id="apprList"></div>
+        </div>
+    </div>
+
+    <!-- Tasks -->
+    <div id="tab-tasks" class="tab">
+        <div class="panel">
+            <div class="panel-header">
+                <h3>待办列表</h3>
+                <button class="btn" onclick="openTaskForm()">+ 新建待办</button>
+            </div>
+            <div class="table-wrap">
+            <table class="table" id="taskTable">
+                <thead><tr><th>ID</th><th>标题</th><th>优先级</th><th>状态</th><th>来源 Run</th><th>截止</th><th>操作</th></tr></thead>
+                <tbody></tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Task Form Modal -->
+<div id="taskModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <h3>新建待办</h3>
+        <form id="taskForm" onsubmit="submitTaskForm(event)">
+            <div class="form-group">
+                <label>标题 *</label>
+                <input id="tTitle" required maxlength="255">
+            </div>
+            <div class="form-group">
+                <label>描述</label>
+                <textarea id="tDescription"></textarea>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>优先级</label>
+                    <select id="tPriority">
+                        <option value="LOW">LOW</option>
+                        <option value="MEDIUM" selected>MEDIUM</option>
+                        <option value="HIGH">HIGH</option>
+                        <option value="URGENT">URGENT</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>截止时间</label>
+                    <input id="tDueAt" type="datetime-local">
+                </div>
+            </div>
+            <div style="text-align: right; margin-top: 12px; display: flex; gap: 8px; justify-content: flex-end;">
+                <button type="button" class="btn secondary" onclick="document.getElementById('taskModal').classList.remove('active')">取消</button>
+                <button type="submit" class="btn">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Incident Form Modal -->
+<div id="incidentModal" class="modal">
+    <div class="modal-content" style="max-width: 560px;">
+        <h3 id="incidentFormTitle">新建故障</h3>
+        <form id="incidentForm" onsubmit="submitIncidentForm(event)">
+            <input type="hidden" id="incId">
+            <div class="form-group">
+                <label>标题 *</label>
+                <input id="incTitle" required maxlength="255">
+            </div>
+            <div class="form-group">
+                <label>描述</label>
+                <textarea id="incDescription"></textarea>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>严重度 *</label>
+                    <select id="incSeverity" required>
+                        <option value="LOW">LOW</option><option value="MEDIUM">MEDIUM</option>
+                        <option value="HIGH">HIGH</option><option value="CRITICAL" selected>CRITICAL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>状态 *</label>
+                    <select id="incStatus" required>
+                        <option value="OPEN" selected>OPEN</option>
+                        <option value="IN_PROGRESS">IN_PROGRESS</option>
+                        <option value="RESOLVED">RESOLVED</option>
+                        <option value="CLOSED">CLOSED</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>类别 *</label>
+                    <input id="incCategory" required maxlength="64" value="BUG">
+                </div>
+                <div class="form-group">
+                    <label>发生时间 *</label>
+                    <input id="incOccurredAt" type="datetime-local" required>
+                </div>
+            </div>
+            <div style="text-align: right; margin-top: 12px; display: flex; gap: 8px; justify-content: flex-end;">
+                <button type="button" class="btn secondary" onclick="document.getElementById('incidentModal').classList.remove('active')">取消</button>
+                <button type="submit" class="btn">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</div>
+
+<script>
+    const $ = (id) => document.getElementById(id);
+    const TOKEN_KEY = 'workpilot_token';
+    const USER_KEY = 'workpilot_user';
+    const THEME_KEY = 'workpilot_theme';
+
+    // ---------- 主题 ----------
+    function applyTheme(theme) {
+        if (theme === 'system') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        // 同步 segmented control 高亮
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.themeSet === theme);
+        });
+        try { localStorage.setItem(THEME_KEY, theme); } catch {}
+    }
+    (function initTheme() {
+        let saved = 'system';
+        try { saved = localStorage.getItem(THEME_KEY) || 'system'; } catch {}
+        if (!['system', 'light', 'dark'].includes(saved)) saved = 'system';
+        applyTheme(saved);
+    })();
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.onclick = () => applyTheme(btn.dataset.themeSet);
+    });
+    // 跟随系统时,实时响应系统变化
+    if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (!document.documentElement.getAttribute('data-theme')) {
+                // 当前是 system,css 自动响应,无需重设
+            }
+        });
+    }
+
+    // ---------- 鉴权工具 ----------
+    function getToken() { return localStorage.getItem(TOKEN_KEY); }
+    function setAuth(token, user) {
+        localStorage.setItem(TOKEN_KEY, token);
+        localStorage.setItem(USER_KEY, JSON.stringify(user));
+    }
+    function clearAuth() { localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(USER_KEY); }
+    function getUser() { try { return JSON.parse(localStorage.getItem(USER_KEY)); } catch { return null; } }
+    function showLogin() { $('loginPage').classList.remove('hidden'); $('appShell').classList.add('hidden'); }
+    function showApp() {
+        $('loginPage').classList.add('hidden');
+        $('appShell').classList.remove('hidden');
+        const u = getUser();
+        if (u) {
+            $('userName').textContent = u.username;
+            $('userRole').textContent = u.role;
+            $('userRole').className = 'role-tag' + (u.role === 'ADMIN' ? ' admin' : '');
+            $('welcomeName').textContent = u.username;
+        }
+        loadDashboard();
+    }
+    function logout() { clearAuth(); showLogin(); }
+
+    async function api(url, options = {}) {
+        options.headers = options.headers || {};
+        const token = getToken();
+        if (token) options.headers['Authorization'] = 'Bearer ' + token;
+        if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
+            options.headers['Content-Type'] = options.headers['Content-Type'] || 'application/json; charset=utf-8';
+            options.body = JSON.stringify(options.body);
+        }
+        const resp = await fetch(url, options);
+        if (resp.status === 401) { clearAuth(); showLogin(); throw new Error('登录已失效'); }
+        if (!resp.ok) {
+            let msg = 'HTTP ' + resp.status;
+            try { const j = await resp.json(); msg = j.message || j.code || msg; } catch {}
+            throw new Error(msg);
+        }
+        const ct = resp.headers.get('content-type') || '';
+        return ct.includes('json') ? resp.json() : resp.text();
+    }
+
+    (function init() {
+        if (getToken()) {
+            api('/api/auth/me').then(u => { setAuth(getToken(), u); showApp(); })
+                .catch(() => { clearAuth(); showLogin(); });
+        } else { showLogin(); }
+    })();
+
+    // ---------- 登录 / 注册 ----------
+    document.querySelectorAll('.login-tabs .tab-btn').forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll('.login-tabs .tab-btn').forEach(x => x.classList.remove('active'));
+            btn.classList.add('active');
+            const which = btn.dataset.form;
+            $('loginForm').style.display = which === 'login' ? 'block' : 'none';
+            $('registerForm').style.display = which === 'register' ? 'block' : 'none';
+        };
+    });
+    $('loginForm').onsubmit = async (e) => {
+        e.preventDefault(); $('loginError').textContent = '';
+        try {
+            const data = await api('/api/auth/login', {
+                method: 'POST',
+                body: { username: $('loginUsername').value.trim(), password: $('loginPassword').value }
+            });
+            setAuth(data.token, data.user); showApp();
+        } catch (err) { $('loginError').textContent = err.message; }
+    };
+    $('registerForm').onsubmit = async (e) => {
+        e.preventDefault(); $('registerError').textContent = '';
+        try {
+            const data = await api('/api/auth/register', {
+                method: 'POST',
+                body: { username: $('regUsername').value.trim(), password: $('regPassword').value }
+            });
+            setAuth(data.token, data.user); showApp();
+        } catch (err) { $('registerError').textContent = err.message; }
+    };
+
+    // ---------- Tab 切换 ----------
+    const TAB_TITLES = { dashboard: '概览', chat: '聊天', incidents: '故障', reports: '报告',
+        knowledge: '知识库', runs: 'Agent 运行', approvals: '审批', tasks: '待办' };
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.onclick = () => {
+            document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+            item.classList.add('active');
+            const tab = item.dataset.tab;
+            $('tab-' + tab).classList.add('active');
+            $('pageTitle').textContent = TAB_TITLES[tab] || '';
+            (TAB_LOADERS[tab] || (() => {}))();
+        };
+    });
+    const TAB_LOADERS = {
+        dashboard: loadDashboard, chat: () => {},
+        incidents: loadIncidents, reports: loadReports,
+        knowledge: loadDocs, runs: loadRuns, approvals: loadApprovals, tasks: loadTasks
+    };
+
+    // ---------- 概览 ----------
+    async function loadDashboard() {
+        try {
+            const [stats, reports, docs, runs, ap, tasks] = await Promise.all([
+                api('/api/v1/incidents/stats').catch(() => null),
+                api('/api/v1/reports').catch(() => ({ total: 0 })),
+                api('/api/v1/knowledge/documents').catch(() => []),
+                api('/api/v1/agent/runs').catch(() => []),
+                api('/api/v1/approvals').catch(() => []),
+                api('/api/v1/tasks').catch(() => []),
+            ]);
+            if (stats) {
+                $('statIncidents').textContent = stats.total || 0;
+                $('statIncidentsOpen').textContent = (stats.open + stats.inProgress) + ' 待处理';
+            }
+            $('statReports').textContent = reports.total || 0;
+            $('statDocs').textContent = docs.length || 0;
+            $('statRuns').textContent = runs.length || 0;
+            $('statApprovals').textContent = ap.length || 0;
+            $('statTasks').textContent = tasks.length || 0;
+        } catch (e) { /* 静默 */ }
+    }
+
+    // ---------- 聊天 ----------
+    function addMsg(text, cls) {
+        const div = document.createElement('div');
+        div.className = 'msg ' + cls;
+        div.textContent = text;
+        $('chat').appendChild(div);
+        $('chat').scrollTop = $('chat').scrollHeight;
+        return div;
+    }
+    function addCitations(citations) {
+        if (!citations || !citations.length) return;
+        const div = document.createElement('div');
+        div.className = 'citations';
+        div.innerHTML = '<div class="label">📚 参考了知识库 ' + citations.length + ' 条片段</div>' +
+            citations.map((c, i) => `
+                <div class="citation">
+                    <div class="src"><span class="idx">${i + 1}</span><span class="doc">${escapeHtml(c.documentName || '未知文档')}</span>${c.chunkIndex != null ? '<span class="meta">· 第 ' + c.chunkIndex + ' 段</span>' : ''}${c.score != null ? '<span class="meta">· 相关度 ' + c.score.toFixed(2) + '</span>' : ''}</div>
+                    <div class="text">${escapeHtml(truncate(c.content || '', 240))}</div>
+                </div>
+            `).join('');
+        $('chat').appendChild(div);
+        $('chat').scrollTop = $('chat').scrollHeight;
+    }
+    function parseSSE(raw, buffer) {
+        const events = (buffer + raw).split('\n\n');
+        const remainder = events.pop();
+        let text = '';
+        for (const evt of events) {
+            for (const line of evt.split('\n')) {
+                if (line.startsWith('data:')) text += line.slice(5).replace(/^ /, '');
+            }
+        }
+        return { text, remainder };
+    }
+    async function send() {
+        const text = $('msgInput').value.trim();
+        if (!text) return;
+        $('sendBtn').disabled = true;
+        addMsg(text, 'user');
+        $('msgInput').value = '';
+        try {
+            const isTask = /分析|排查|总结|归纳|报告|创建|新建|写报告|待办|检索知识库|知识库/.test(text);
+            if (isTask) {
+                const data = await api('/api/v1/chat', { method: 'POST', body: { message: text } });
+                let sys = `已启动 Agent 任务\nrunId: ${data.runId}\n状态: ${data.status}`;
+                if (data.status === 'WAITING_APPROVAL') sys += '\n\n⚠️ 需要审批后才能继续,请到"审批"页面操作';
+                if (data.output) sys += '\n\n' + data.output;
+                addMsg(sys, 'system');
+                try {
+                    const tr = await api('/api/v1/agent/runs/' + data.runId + '/trace');
+                    if (tr.citations && tr.citations.length) addCitations(tr.citations);
+                } catch {}
+                refreshApprovalBadge();
+            } else {
+                const reply = addMsg('', 'assistant');
+                const resp = await fetch('/api/v1/chat/stream', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+                    body: JSON.stringify({ message: text })
+                });
+                if (resp.status === 401) { clearAuth(); showLogin(); throw new Error('登录已失效'); }
+                const reader = resp.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '', full = '';
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    const parsed = parseSSE(decoder.decode(value, { stream: true }), buffer);
+                    buffer = parsed.remainder;
+                    if (parsed.text) { full += parsed.text; reply.textContent = full; $('chat').scrollTop = $('chat').scrollHeight; }
+                }
+            }
+        } catch (e) { addMsg('错误: ' + e.message, 'error'); }
+        finally { $('sendBtn').disabled = false; $('msgInput').focus(); }
+    }
+    $('sendBtn').onclick = send;
+    $('msgInput').onkeydown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } };
+
+    // ---------- 故障管理 ----------
+    let allIncidents = [];
+    async function loadIncidents() {
+        const sev = $('incFilterSeverity').value;
+        const st = $('incFilterStatus').value;
+        const cat = $('incFilterCategory').value;
+        const params = new URLSearchParams();
+        if (sev) params.set('severity', sev);
+        if (st) params.set('status', st);
+        if (cat) params.set('category', cat);
+        const [list, stats] = await Promise.all([
+            api('/api/v1/incidents?' + params.toString()),
+            api('/api/v1/incidents/stats').catch(() => null),
+        ]);
+        allIncidents = list.rows;
+        const tbody = document.querySelector('#incidentTable tbody');
+        tbody.innerHTML = list.rows.map(i => `
+            <tr onclick="showIncidentDetail(${i.id})" data-id="${i.id}">
+                <td><span class="tag ${i.severity}">${i.severity}</span></td>
+                <td>${escapeHtml(i.title)}</td>
+                <td>${escapeHtml(i.category)}</td>
+                <td><span class="tag ${i.status}">${i.status}</span></td>
+                <td>${formatTime(i.occurredAt)}</td>
+            </tr>
+        `).join('') || '<tr><td colspan="5" class="empty">暂无故障</td></tr>';
+
+        const oldCat = $('incFilterCategory').value;
+        const cats = [...new Set(list.rows.map(r => r.category))].sort();
+        $('incFilterCategory').innerHTML = '<option value="">全部</option>' +
+            cats.map(c => `<option value="${escapeHtml(c)}" ${c === oldCat ? 'selected' : ''}>${escapeHtml(c)}</option>`).join('');
+
+        if (stats) renderIncidentStats(stats);
+    }
+    function renderIncidentStats(s) {
+        const colorMap = { OPEN: 'var(--primary)', IN_PROGRESS: 'var(--warning)', RESOLVED: 'var(--success)', CLOSED: 'var(--text-faint)' };
+        $('incidentStats').innerHTML = `
+            <div class="stat-card"><div class="label">总数</div><div class="value">${s.total}</div></div>
+            <div class="stat-card"><div class="label">OPEN</div><div class="value" style="color:${colorMap.OPEN}">${s.open}</div></div>
+            <div class="stat-card"><div class="label">IN_PROGRESS</div><div class="value" style="color:${colorMap.IN_PROGRESS}">${s.inProgress}</div></div>
+            <div class="stat-card"><div class="label">RESOLVED</div><div class="value" style="color:${colorMap.RESOLVED}">${s.resolved}</div></div>
+            <div class="stat-card"><div class="label">CLOSED</div><div class="value" style="color:${colorMap.CLOSED}">${s.closed}</div></div>
+        `;
+    }
+    function showIncidentDetail(id) {
+        const i = allIncidents.find(x => x.id === id);
+        if (!i) return;
+        document.querySelectorAll('#incidentTable tbody tr').forEach(r => r.classList.remove('selected'));
+        const row = document.querySelector(`#incidentTable tbody tr[data-id="${id}"]`);
+        if (row) row.classList.add('selected');
+        $('incidentDetail').innerHTML = `
+            <h3 style="margin-bottom: 14px; color: var(--text-strong);">${escapeHtml(i.title)}</h3>
+            <div class="card-row"><span class="label">严重度</span><span class="value"><span class="tag ${i.severity}">${i.severity}</span></span></div>
+            <div class="card-row"><span class="label">状态</span><span class="value"><span class="tag ${i.status}">${i.status}</span></span></div>
+            <div class="card-row"><span class="label">类别</span><span class="value">${escapeHtml(i.category)}</span></div>
+            <div class="card-row"><span class="label">发生时间</span><span class="value">${formatTime(i.occurredAt)}</span></div>
+            <div class="card-row"><span class="label">记录时间</span><span class="value">${formatTime(i.createdAt)}</span></div>
+            <div style="margin-top: 14px; padding: 12px; background: var(--bg-elevated); border-radius: 8px; color: var(--text); font-size: 13px; line-height: 1.6;">${escapeHtml(i.description || '(无描述)')}</div>
+            <div style="margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="btn success small" onclick="quickStatus(${i.id}, 'IN_PROGRESS')">→ IN_PROGRESS</button>
+                <button class="btn success small" onclick="quickStatus(${i.id}, 'RESOLVED')">→ RESOLVED</button>
+                <button class="btn secondary small" onclick="quickStatus(${i.id}, 'CLOSED')">→ CLOSED</button>
+                <button class="btn secondary small" onclick="openIncidentForm(${i.id})">编辑</button>
+                <button class="btn danger small" onclick="deleteIncident(${i.id})">删除</button>
+            </div>
+        `;
+    }
+    async function quickStatus(id, status) {
+        try { await api(`/api/v1/incidents/${id}`, { method: 'PATCH', body: { status } }); await loadIncidents(); showIncidentDetail(id); }
+        catch (e) { alert(e.message); }
+    }
+    async function deleteIncident(id) {
+        if (!confirm('确认删除?')) return;
+        try { await api(`/api/v1/incidents/${id}`, { method: 'DELETE' }); $('incidentDetail').innerHTML = '<div class="empty">已删除</div>'; await loadIncidents(); }
+        catch (e) { alert(e.message); }
+    }
+    function resetIncFilters() {
+        $('incFilterSeverity').value = ''; $('incFilterStatus').value = ''; $('incFilterCategory').value = '';
+        loadIncidents();
+    }
+    function openIncidentForm(id) {
+        $('incidentFormTitle').textContent = id ? '编辑故障' : '新建故障';
+        $('incId').value = id || '';
+        if (id) {
+            const i = allIncidents.find(x => x.id === id);
+            if (i) {
+                $('incTitle').value = i.title; $('incDescription').value = i.description || '';
+                $('incSeverity').value = i.severity; $('incStatus').value = i.status;
+                $('incCategory').value = i.category;
+                $('incOccurredAt').value = toLocalDatetime(i.occurredAt);
+            }
+        } else {
+            $('incidentForm').reset(); $('incOccurredAt').value = toLocalDatetime(new Date().toISOString());
+        }
+        $('incidentModal').classList.add('active');
+    }
+    async function submitIncidentForm(e) {
+        e.preventDefault();
+        const id = $('incId').value;
+        const body = {
+            title: $('incTitle').value,
+            description: $('incDescription').value,
+            severity: $('incSeverity').value,
+            status: $('incStatus').value,
+            category: $('incCategory').value,
+            occurredAt: new Date($('incOccurredAt').value).toISOString()
+        };
+        try {
+            if (id) await api(`/api/v1/incidents/${id}`, { method: 'PATCH', body });
+            else await api('/api/v1/incidents', { method: 'POST', body });
+            $('incidentModal').classList.remove('active');
+            await loadIncidents();
+        } catch (e) { alert(e.message); }
+    }
+    function toLocalDatetime(iso) {
+        if (!iso) return '';
+        const d = new Date(iso);
+        const pad = n => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    // ---------- 报告中心 ----------
+    let allReports = [];
+    async function loadReports() {
+        const data = await api('/api/v1/reports');
+        allReports = data.rows;
+        const tbody = document.querySelector('#reportTable tbody');
+        tbody.innerHTML = data.rows.map(r => `
+            <tr onclick="showReportDetail(${r.runId})" data-rid="${r.runId}">
+                <td>${escapeHtml(r.title)}</td>
+                <td>#${r.runId}</td>
+                <td><span class="tag ${r.runStatus}">${r.runStatus}</span></td>
+                <td>${formatTime(r.createdAt)}</td>
+            </tr>
+        `).join('') || '<tr><td colspan="4" class="empty">暂无报告<br><small style="color: var(--text-faint);">在聊天里用关键词"分析"或"报告"触发 Agent 自动生成</small></td></tr>';
+    }
+    async function showReportDetail(runId) {
+        document.querySelectorAll('#reportTable tbody tr').forEach(r => r.classList.remove('selected'));
+        const row = document.querySelector(`#reportTable tbody tr[data-rid="${runId}"]`);
+        if (row) row.classList.add('selected');
+        const d = await api(`/api/v1/reports/${runId}`);
+        let evidenceHtml = '';
+        if (d.evidence && d.evidence.length) {
+            evidenceHtml = '<div class="section-title-inline">📎 证据来源</div><div class="evidence-list">';
+            d.evidence.forEach((e, idx) => {
+                evidenceHtml += `<div style="margin-bottom: 8px;"><b>[${e.stepId}] ${e.tool}</b> ${e.summary ? '— ' + escapeHtml(e.summary) : ''}</div>`;
+            });
+            evidenceHtml += '</div>';
+        }
+        let citationsHtml = '';
+        try {
+            const tr = await api('/api/v1/agent/runs/' + runId + '/trace');
+            if (tr.citations && tr.citations.length) {
+                citationsHtml = '<div class="section-title-inline">📚 参考了 ' + tr.citations.length + ' 个知识库片段</div>';
+                tr.citations.forEach((c, i) => {
+                    citationsHtml += `<div class="citation">
+                        <div class="src"><span class="idx">${i + 1}</span><span class="doc">${escapeHtml(c.documentName || '未知文档')}</span>${c.chunkIndex != null ? '<span class="meta">· 第 ' + c.chunkIndex + ' 段</span>' : ''}</div>
+                        <div class="text">${escapeHtml(truncate(c.content || '', 240))}</div>
+                    </div>`;
+                });
+            }
+        } catch {}
+        $('reportDetail').innerHTML = `
+            <h3 style="margin-bottom: 8px; color: var(--text-strong);">${escapeHtml(d.title)}</h3>
+            <div style="color: var(--text-muted); font-size: 12px; margin-bottom: 14px;">
+                任务 #${d.runId} · 状态 ${d.runStatus} · 生成于 ${formatTime(d.createdAt)}
+            </div>
+            <div class="report-body">${escapeHtml(d.content)}</div>
+            ${evidenceHtml}
+            ${citationsHtml}
+        `;
+    }
+
+    // ---------- 知识库 ----------
+    async function loadDocs() {
+        const docs = await api('/api/v1/knowledge/documents');
+        const tbody = document.querySelector('#docTable tbody');
+        tbody.innerHTML = docs.map(d => `
+            <tr>
+                <td>${escapeHtml(d.name)}</td>
+                <td><span class="tag ${d.status}">${d.status}</span></td>
+                <td>${d.chunkCount}</td>
+                <td>${formatTime(d.createdAt)}</td>
+                <td><button class="btn danger small" onclick="deleteDoc(${d.id})">删除</button></td>
+            </tr>
+        `).join('') || '<tr><td colspan="5" class="empty">暂无文档</td></tr>';
+    }
+    async function deleteDoc(id) {
+        if (!confirm('确认删除?')) return;
+        await api('/api/v1/knowledge/documents/' + id, { method: 'DELETE' });
+        loadDocs();
+    }
+    $('fileDrop').ondragover = (e) => { e.preventDefault(); };
+    $('fileDrop').ondrop = (e) => {
+        e.preventDefault();
+        if (e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]);
+    };
+    $('fileInput').onchange = (e) => { if (e.target.files.length) uploadFile(e.target.files[0]); };
+    async function uploadFile(file) {
+        const form = new FormData();
+        form.append('file', file);
+        try { await api('/api/v1/knowledge/documents', { method: 'POST', body: form });
+            alert('已上传,正在处理...'); setTimeout(loadDocs, 2000); }
+        catch (e) { alert('上传失败: ' + e.message); }
+    }
+    async function doSearch() {
+        const q = $('searchInput').value.trim();
+        if (!q) return;
+        $('searchResults').innerHTML = '<div class="empty"><div class="empty-icon">⏳</div>搜索中…</div>';
+        try {
+            const r = await api('/api/v1/knowledge/search?q=' + encodeURIComponent(q) + '&topK=5');
+            if (!r.count) { $('searchResults').innerHTML = '<div class="empty"><div class="empty-icon">🔍</div>没有匹配的片段</div>'; return; }
+            $('searchResults').innerHTML = '<div style="color: var(--text-muted); font-size: 12px; margin-bottom: 10px;">命中 ' + r.count + ' 条</div>' +
+                r.hits.map((h, i) => {
+                    const m = h.metadata || {};
+                    const src = m.document_name || '未知文档';
+                    const idx = m.chunk_index != null ? ' · 第 ' + m.chunk_index + ' 段' : '';
+                    return `<div class="hit-card">
+                        <div class="src"><span class="idx">${i + 1}</span><span class="doc">${escapeHtml(src + idx)}</span></div>
+                        <div class="text">${escapeHtml(h.content || '')}</div>
+                    </div>`;
+                }).join('');
+        } catch (e) { $('searchResults').innerHTML = '<div class="empty">搜索失败: ' + e.message + '</div>'; }
+    }
+
+    // ---------- 运行历史(轨迹内嵌) ----------
+    async function loadRuns() {
+        const runs = await api('/api/v1/agent/runs');
+        $('runList').innerHTML = runs.map(r => `
+            <div class="card run-card" id="run-${r.id}">
+                <div class="card-row"><span class="label">ID</span><span class="value">#${r.id}</span></div>
+                <div class="card-row"><span class="label">状态</span><span class="value"><span class="tag ${r.status}">${r.status}</span></span></div>
+                <div class="card-row"><span class="label">输入</span><span class="value">${escapeHtml((r.input || '').slice(0, 80))}</span></div>
+                ${r.output ? `<div class="card-row"><span class="label">输出</span><span class="value" style="color: var(--text);">${escapeHtml(r.output.slice(0, 120))}${r.output.length > 120 ? '...' : ''}</span></div>` : ''}
+                ${r.errorMessage ? `<div class="card-row"><span class="label">错误</span><span class="value" style="color: var(--danger);">${escapeHtml(r.errorMessage)}</span></div>` : ''}
+                <div class="card-row"><span class="label">创建</span><span class="value">${formatTime(r.createdAt)}</span></div>
+                <div style="margin-top: 12px;">
+                    <button class="btn small" onclick="toggleTrace(${r.id}, this)">展开轨迹 ▾</button>
+                </div>
+                <div class="trace-inline" id="trace-${r.id}"></div>
+            </div>
+        `).join('') || '<div class="empty">暂无运行</div>';
+    }
+    async function toggleTrace(id, btn) {
+        const wrap = $('trace-' + id);
+        const card = $('run-' + id);
+        if (card.classList.contains('expanded')) {
+            card.classList.remove('expanded');
+            btn.textContent = '展开轨迹 ▾';
+            return;
+        }
+        card.classList.add('expanded');
+        btn.textContent = '收起轨迹 ▴';
+        if (wrap.dataset.loaded === '1') return;
+        wrap.innerHTML = '<div class="empty">加载中…</div>';
+        const data = await api('/api/v1/agent/runs/' + id + '/trace');
+        const run = data.run;
+        const execs = data.executions || [];
+        let html = `
+            <div class="card-row"><span class="label">开始</span><span class="value">${formatTime(run.startedAt)}</span></div>
+            <div class="card-row"><span class="label">结束</span><span class="value">${formatTime(run.finishedAt)}</span></div>
+            <div class="section-title-inline">📋 计划 (${(data.plan && data.plan.steps) ? data.plan.steps.length : 0} 步)</div>
+            <div class="plan-block">${data.plan ? JSON.stringify(data.plan, null, 2) : '(无计划)'}</div>
+            <div class="section-title-inline">⚙️ 执行步骤 (${execs.length})</div>
+        `;
+        execs.forEach(e => {
+            html += `<div class="step-item ${e.status}">
+                <div><b>[${e.stepId}] ${e.toolName}</b> <span class="tag ${e.status}">${e.status}</span> ${e.durationMs ? e.durationMs + 'ms' : ''}</div>
+                ${e.arguments ? `<div class="args">参数: ${escapeHtml((e.arguments || '').slice(0, 300))}</div>` : ''}
+                ${e.summary ? `<div class="args">结果: ${escapeHtml((e.summary || '').slice(0, 300))}</div>` : ''}
+            </div>`;
+        });
+        if (data.citations && data.citations.length) {
+            html += '<div class="section-title-inline">📚 知识库引用 (' + data.citations.length + ')</div>';
+            data.citations.forEach((c, i) => {
+                html += `<div class="citation">
+                    <div class="src"><span class="idx">${i + 1}</span><span class="doc">${escapeHtml(c.documentName || '未知文档')}</span>${c.chunkIndex != null ? '<span class="meta">· 第 ' + c.chunkIndex + ' 段</span>' : ''}</div>
+                    <div class="text">${escapeHtml(truncate(c.content || '', 240))}</div>
+                </div>`;
+            });
+        }
+        if (run.output) {
+            html += '<div class="section-title-inline">📤 最终输出</div>' +
+                '<div class="report-body">' + escapeHtml(run.output) + '</div>';
+        }
+        wrap.innerHTML = html;
+        wrap.dataset.loaded = '1';
+    }
+
+    // ---------- 审批 ----------
+    async function loadApprovals() {
+        const list = await api('/api/v1/approvals');
+        if (list.length === 0) {
+            $('apprList').innerHTML = '<div class="empty"><div class="empty-icon">🎉</div>暂无待审批</div>';
+        } else {
+            $('apprList').innerHTML = list.map(a => {
+                let payload = {};
+                try { payload = JSON.parse(a.payload); } catch(e) {}
+                return `<div class="card">
+                    <div class="card-row"><span class="label">审批 ID</span><span class="value">#${a.id}</span></div>
+                    <div class="card-row"><span class="label">Run ID</span><span class="value">#${a.runId}</span></div>
+                    <div class="card-row"><span class="label">工具</span><span class="value"><b>${a.toolName}</b></span></div>
+                    <div class="card-row"><span class="label">用途</span><span class="value">${escapeHtml(payload.purpose || '')}</span></div>
+                    <div class="card-row"><span class="label">参数</span><span class="value" style="font-size: 12px;">${escapeHtml(JSON.stringify(payload.arguments || {}))}</span></div>
+                    <div style="margin-top: 12px; display: flex; gap: 8px;">
+                        <button class="btn success" onclick="approveAppr(${a.id})">✅ 批准</button>
+                        <button class="btn danger" onclick="rejectAppr(${a.id})">❌ 拒绝</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+        refreshApprovalBadge();
+    }
+    async function approveAppr(id) {
+        const data = await api('/api/v1/approvals/' + id + '/approve', { method: 'POST', body: { comment: '批准' } });
+        alert('已批准,Run 状态: ' + data.status);
+        loadApprovals();
+    }
+    async function rejectAppr(id) {
+        await api('/api/v1/approvals/' + id + '/reject', { method: 'POST', body: { comment: '拒绝' } });
+        alert('已拒绝');
+        loadApprovals();
+    }
+    async function refreshApprovalBadge() {
+        try {
+            const list = await api('/api/v1/approvals');
+            const badge = $('apprBadge');
+            if (list.length > 0) { badge.textContent = list.length; badge.style.display = 'inline-block'; }
+            else badge.style.display = 'none';
+        } catch {}
+    }
+
+    // ---------- 待办 ----------
+    async function loadTasks() {
+        const tasks = await api('/api/v1/tasks');
+        const tbody = document.querySelector('#taskTable tbody');
+        tbody.innerHTML = tasks.map(t => {
+            const actions = [];
+            if (t.status === 'OPEN') actions.push(`<button class="btn small" onclick="quickTask(${t.id}, 'IN_PROGRESS')">开始</button>`);
+            if (t.status !== 'DONE' && t.status !== 'CANCELLED') actions.push(`<button class="btn success small" onclick="quickTask(${t.id}, 'DONE')">完成</button>`);
+            actions.push(`<button class="btn danger small" onclick="deleteTask(${t.id})">删除</button>`);
+            return `<tr>
+                <td>#${t.id}</td>
+                <td>${escapeHtml(t.title)}</td>
+                <td><span class="tag ${t.priority}">${t.priority}</span></td>
+                <td><span class="tag ${t.status}">${t.status}</span></td>
+                <td>#${t.sourceRunId || '-'}</td>
+                <td>${t.dueAt ? formatTime(t.dueAt) : '-'}</td>
+                <td>${actions.join(' ')}</td>
+            </tr>`;
+        }).join('') || '<tr><td colspan="7" class="empty">暂无待办</td></tr>';
+    }
+    async function quickTask(id, status) {
+        try { await api(`/api/v1/tasks/${id}/status`, { method: 'PATCH', body: { status } }); await loadTasks(); }
+        catch (e) { alert(e.message); }
+    }
+    async function deleteTask(id) {
+        if (!confirm('确认删除?')) return;
+        try { await api(`/api/v1/tasks/${id}`, { method: 'DELETE' }); await loadTasks(); }
+        catch (e) { alert(e.message); }
+    }
+    function openTaskForm() {
+        $('taskForm').reset();
+        $('taskModal').classList.add('active');
+    }
+    async function submitTaskForm(e) {
+        e.preventDefault();
+        const body = {
+            title: $('tTitle').value,
+            description: $('tDescription').value,
+            priority: $('tPriority').value,
+            dueAt: $('tDueAt').value ? new Date($('tDueAt').value).toISOString() : null
+        };
+        try {
+            await api('/api/v1/tasks', { method: 'POST', body });
+            $('taskModal').classList.remove('active');
+            await loadTasks();
+        } catch (e) { alert(e.message); }
+    }
+
+    // ---------- 工具 ----------
+    function escapeHtml(s) {
+        if (s == null) return '';
+        return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function formatTime(iso) {
+        if (!iso) return '-';
+        return new Date(iso).toLocaleString('zh-CN');
+    }
+    function truncate(s, n) {
+        if (!s) return '';
+        return s.length <= n ? s : s.substring(0, n) + '...';
+    }
+
+    refreshApprovalBadge();
+    setInterval(refreshApprovalBadge, 30000);
+</script>
+</body>
+</html>
